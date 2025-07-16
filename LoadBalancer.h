@@ -11,11 +11,13 @@ class LoadBalancer {
 
     private:
         int numWebServers;
+        int totalProcessedRequests;
         queue<Request> requestQueue;
         vector<WebServer> servers;
+        ofstream& lbLogger;
 
     public:
-        LoadBalancer(const int num);
+        LoadBalancer(const int num, ofstream& logger);
 
         void createRequest();
         
@@ -28,6 +30,8 @@ class LoadBalancer {
         void scaleDown();
 
         bool checkIfMoreRequests();
+
+        int getTotalRequestsProcessed();
 
 };
 

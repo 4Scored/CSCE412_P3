@@ -1,23 +1,22 @@
-#include <iostream>
 #include "WebServer.h"
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
-WebServer::WebServer(const int id) {
-    this->serverID = id;
-    this->processingRequestID = "";
-    this->processTimeLeft = 0;
-    this->isFree = true;
-}
+WebServer::WebServer(const int id, ofstream& logger) : 
+    serverID(id), processingRequestID(""), processTimeLeft(0), lbLogger(logger), isFree(true) {} 
 
-void WebServer::processRequest() {
+bool WebServer::processRequest() {
     if (!this->isFree) { // If not free, its taken a request
         this->processTimeLeft--; // Decrement current request's process time
         if (this->processTimeLeft <= 0) {
             this->isFree = true; // Freed after process time is up
-            cout << "Server #" << this->serverID << " has processed Request from " << this->processingRequestID << endl;
+            this->lbLogger << "Server #" << this->serverID << " has finished processing Request from " << this->processingRequestID << endl;
+            return true;
         }
     }
+    return false;
 }
 
 void WebServer::getRequestToProcess(const Request& request) {

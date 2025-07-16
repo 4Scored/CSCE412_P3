@@ -3,17 +3,21 @@
 
 #include "Request.h"
 #include <string>
+#include <fstream>
+
+using namespace std;
 
 class WebServer {            
     public:
         int serverID;
         int processTimeLeft;
         string processingRequestID;
+        ofstream& lbLogger;
         bool isFree;
 
-        WebServer(const int id);
+        WebServer(const int id, ofstream& logger);
 
-        void processRequest();
+        bool processRequest();
 
         void getRequestToProcess(const Request& request);
 
