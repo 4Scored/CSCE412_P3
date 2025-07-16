@@ -12,12 +12,13 @@ int main() {
     int numWebServers = 0, timeToRun = 0;
     cout << "Number of Web Servers: ";
     cin >> numWebServers;
-    cout << endl;
     cout << "Number of Cycles to run for: ";
     cin >> numWebServers;
     cout << endl;
 
     // generate full queue (numWebServers * 100)
     
+    LoadBalancer lb(10); // testing code
+    lb.createRequest();
 
 }

@@ -9,23 +9,25 @@ using namespace std;
 
 class LoadBalancer {  
 
-    int numWebServers;
-    queue<Request> requestQueue;
-    vector<WebServer> servers;
+    private:
+        int numWebServers;
+        queue<Request> requestQueue;
+        vector<WebServer> servers;
 
-    LoadBalancer(const int num);
+    public:
+        LoadBalancer(const int num);
 
-    void createRequest();
-    
-    void assignRequests();
-    
-    void processRequest();
+        Request createRequest();
+        
+        void assignRequests();
+        
+        void processRequest();
 
-    void scaleUp();
+        void scaleUp();
 
-    void scaleDown();
+        void scaleDown();
 
-    bool checkIfMoreRequests();
+        bool checkIfMoreRequests();
 
 };
 

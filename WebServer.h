@@ -6,7 +6,7 @@
 class WebServer {            
 
     int serverID;
-    int processTime;
+    int processTimeLeft;
     bool isFree;
 
     WebServer(const int id);
