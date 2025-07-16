@@ -2,11 +2,13 @@
 #define WEBSERVER_H
 
 #include "Request.h"
+#include <string>
 
 class WebServer {            
     public:
         int serverID;
         int processTimeLeft;
+        string processingRequestID;
         bool isFree;
 
         WebServer(const int id);

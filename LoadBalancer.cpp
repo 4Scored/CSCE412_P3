@@ -23,7 +23,7 @@ LoadBalancer::LoadBalancer(const int num) {
     }    
 }
 
-Request LoadBalancer::createRequest() {
+void LoadBalancer::createRequest() {
     static std::random_device rd;
     static std::mt19937 rng(rd()); 
     static std::uniform_int_distribution<int> distIP(0, 255);  // IP byte range
@@ -33,22 +33,25 @@ Request LoadBalancer::createRequest() {
     ipIN << distIP(rng) << "." << distIP(rng) << "." << distIP(rng) << "." << distIP(rng);
     ipOUT << distIP(rng) << "." << distIP(rng) << "." << distIP(rng) << "." << distIP(rng);
     // cout << ipIN.str() << " " << ipOUT.str() << " " << distCycles(rng) << endl;   
-    return Request(ipIN.str(), ipOUT.str(), distCycles(rng));
+    Request newReq(ipIN.str(), ipOUT.str(), distCycles(rng));
+    this->requestQueue.push(newReq);
+    cout << "New Request created from " << newReq.ipIN << " to " << newReq.ipOUT << endl;
 }
 
 void LoadBalancer::assignRequests() {
     for (auto& server : this->servers) {    
         if (server.checkAvailability() && this->checkIfMoreRequests()) { // Check if there's an available server and more requests exist
-            Request req = this->requestQueue.front(); // Take a request from the request queue
+            Request req = this->requestQueue.front(); // Take a request from the request queue            
             this->requestQueue.pop(); // Pop it from the request queue
             server.getRequestToProcess(req); // Assign the Request to the Server
+            cout << "Server #" << server.serverID << " assigned Request from " << req.ipIN << " to " << req.ipOUT << endl;
         }
     }
 }
 
-void LoadBalancer::processRequest() {
+void LoadBalancer::processRequests() {
     for (auto& server : this->servers) {    
-        server.processRequest();
+        server.processRequest();    
     }
 }
 

@@ -17,11 +17,11 @@ class LoadBalancer {
     public:
         LoadBalancer(const int num);
 
-        Request createRequest();
+        void createRequest();
         
         void assignRequests();
         
-        void processRequest();
+        void processRequests();
 
         void scaleUp();
 
