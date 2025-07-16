@@ -4,18 +4,18 @@
 #include "Request.h"
 
 class WebServer {            
+    public:
+        int serverID;
+        int processTimeLeft;
+        bool isFree;
 
-    int serverID;
-    int processTimeLeft;
-    bool isFree;
+        WebServer(const int id);
 
-    WebServer(const int id);
+        void processRequest(const Request& request);
 
-    void processRequest(const Request& request);
+        void getRequestToProcess(const Request& request);
 
-    void getRequestToProcess(const Request& request);
-
-    bool checkAvailability();
+        bool checkAvailability();
 
 };
 
