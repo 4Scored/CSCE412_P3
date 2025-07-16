@@ -9,6 +9,12 @@
 #include <sstream>
 using namespace std;
 
+// For Dynamic Server Allocation
+const int scaleUpThreshold = 40; // When Request Queue exceeds 40
+const int scaleDownThreshold = 10; // When Request Queue is less than 10
+const int minServerSize = 10; // Assuming numWebServers is 10; can be changed
+
+
 LoadBalancer::LoadBalancer(const int num) {
     this->numWebServers = num;
     for (int i = 0; i < num; i++) {
@@ -41,15 +47,27 @@ void LoadBalancer::assignRequests() {
 }
 
 void LoadBalancer::processRequest() {
-
+    for (auto& server : this->servers) {    
+        server.processRequest();
+    }
 }
 
 void LoadBalancer::scaleUp() {
-
+    if (this->requestQueue.size() > scaleUpThreshold) {
+        int newID = this->servers.size(); // Assign newID
+        this->servers.push_back(WebServer(newID)); // and add it to the WebServer vector
+        cout << "Scaling up: Added server " << newID << endl; 
+    }
 }
 
 void LoadBalancer::scaleDown() {
-
+    if (this->requestQueue.size() < scaleDownThreshold && this->servers.size() > minServerSize) {
+        WebServer& lastServer = this->servers.back();
+        if (lastServer.checkAvailability()) {
+            std::cout << "Scaling down: Removing server " << lastServer.serverID << "\n";
+            this->servers.pop_back();
+        }
+    }
 }
 
 bool LoadBalancer::checkIfMoreRequests() {

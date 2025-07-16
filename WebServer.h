@@ -11,7 +11,7 @@ class WebServer {
 
         WebServer(const int id);
 
-        void processRequest(const Request& request);
+        void processRequest();
 
         void getRequestToProcess(const Request& request);
 
