@@ -10,7 +10,7 @@ struct Request {
     string ipOUT;
     int processTime;
 
-    Request(const string& ipIN, const string& ipOUT, const int processTime);
+    Request(const string& in, const string& out, const int time);
 };
 
 #endif

@@ -6,10 +6,10 @@
 class WebServer {            
 
     int serverID;
-    int processTimeLeft;
+    int processTime;
     bool isFree;
 
-    WebServer(const int serverID);
+    WebServer(const int id);
 
     void processRequest(const Request& request);
 
