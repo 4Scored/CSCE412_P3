@@ -17,7 +17,7 @@ const int minServersSize = 10; // Assuming numWebServers is 10 (as from the Inst
 const int maxServersSize = 20; // To not exceed 20 webservers
 
 LoadBalancer::LoadBalancer(const int num, ofstream& logger) : numWebServers(num), lbLogger(logger) {    
-    for (int i = 1; i <= num; i++) {
+    for (int i = 1; i <= this->numWebServers; i++) {
         this->servers.push_back(WebServer(i, lbLogger)); // Add WebServer Instanes according to user input
         this->lbLogger << "WebServer #" << i << " has been created" << endl;
     }    

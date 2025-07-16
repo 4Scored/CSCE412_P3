@@ -20,7 +20,7 @@ int main() {
     static std::random_device rd;
     static std::mt19937 rng(rd()); 
     static std::uniform_int_distribution<int> distAddReq(1, 3); // Cycle Time
-    static std::uniform_int_distribution<int> distAddRanReqs(200, 300); // Random Bursting Cycle Time
+    static std::uniform_int_distribution<int> distAddRandReqs(200, 300); // Random Bursting Cycle Time
 
     // Get Input (# of web servers and time to run)
     int numWebServers = 0, numTotalCycles = 0;

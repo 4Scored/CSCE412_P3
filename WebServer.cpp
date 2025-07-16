@@ -5,7 +5,7 @@
 using namespace std;
 
 WebServer::WebServer(const int id, ofstream& logger) : 
-    serverID(id), processingRequestID(""), processTimeLeft(0), lbLogger(logger), isFree(true) {} 
+    serverID(id), processTimeLeft(0), processingRequestID(""), lbLogger(logger), isFree(true) {} 
 
 bool WebServer::processRequest() {
     if (!this->isFree) { // If not free, its taken a request
