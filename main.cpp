@@ -67,10 +67,10 @@ int main() {
     // Run through cycles
     for (int cycle = 1; cycle <= numTotalCycles; cycle++) {
         lbLogger << "Clock Cycle #" << cycle << " -- " << endl;    
-        if (distAddReq(rng) == 1) { // 33% of new request every time
+        if (distAddReq(rng) == 1) { // 33% of new request every time; 1 out of (1, 2, 3)
             loadBalancer.createRequest();      
         }
-        if (distAddRandReqs(rng) % 201 == 0 ) { // There's a 1/40 chance for 50 burst requests
+        if (distAddRandReqs(rng) % 201 == 0 ) { // There's a 1/400 chance for 50 burst requests; only 201 is divisible by itself to have a remainder of 0
             for (int req = 0; req < 50; req++) {
                 loadBalancer.createRequest(); 
             }
