@@ -19,7 +19,7 @@ const int maxServersSize = 20; // To not exceed 20 webservers
 LoadBalancer::LoadBalancer(const int num, ofstream& logger) : numWebServers(num), lbLogger(logger) {    
     for (int i = 1; i <= this->numWebServers; i++) {
         this->servers.push_back(WebServer(i, lbLogger)); // Add WebServer Instanes according to user input
-        this->lbLogger << "WebServer #" << i << " has been created" << endl;
+        this->lbLogger << "WebServer " << i << " has been created" << endl;
     }    
 }
 
@@ -44,7 +44,7 @@ void LoadBalancer::assignRequests() {
             Request req = this->requestQueue.front(); // Take a request from the request queue            
             this->requestQueue.pop(); // Pop it from the request queue
             server.getRequestToProcess(req); // Assign the Request to the Server
-            this->lbLogger << "Server #" << server.serverID << " assigned Request from " << req.ipIN << " to " << req.ipOUT << endl;
+            this->lbLogger << "WebServer " << server.serverID << " assigned Request from " << req.ipIN << " to " << req.ipOUT << endl;
         }
     }
 }
@@ -59,9 +59,9 @@ void LoadBalancer::processRequests() {
 
 void LoadBalancer::scaleUp() {
     if (this->requestQueue.size() > scaleUpThreshold && this->servers.size() < maxServersSize) {
-        int newID = this->servers.size(); // Assign newID
+        int newID = this->servers.size() + 1; // Assign newID
         this->servers.push_back(WebServer(newID, lbLogger)); // and add it to the WebServer vector
-        this->lbLogger << "Scaling up: Added server #" << newID << endl; 
+        this->lbLogger << "Scaling up: Added WebServer " << newID << endl; 
     }
 }
 
@@ -69,7 +69,7 @@ void LoadBalancer::scaleDown() {
     if (this->requestQueue.size() < scaleDownThreshold && this->servers.size() > minServersSize) {
         WebServer& lastServer = this->servers.back();
         if (lastServer.checkAvailability()) {
-            this->lbLogger << "Scaling down: Removing server #" << lastServer.serverID << "\n";
+            this->lbLogger << "Scaling down: Removed WebServer " << lastServer.serverID << "\n";
             this->servers.pop_back();
         }
     }
@@ -81,4 +81,23 @@ bool LoadBalancer::checkIfMoreRequests() {
 
 int LoadBalancer::getTotalRequestsProcessed() {
     return this->totalProcessedRequests;
+}
+
+int LoadBalancer::getRequestQueueSize() {
+    return this->requestQueue.size();
+}
+
+void LoadBalancer::endingServerStatuses() {
+    int active = 0, inactive = 0, discarded = this->getRequestQueueSize();
+    for (auto& server : this->servers) {    
+        if (server.checkAvailability()) { // If free, it's not processing any requests, thus inactive
+            inactive++;            
+        } else { // else, its active
+            active++;
+            discarded++;
+        }
+    }
+    this->lbLogger << "Active WebServers: " << active << endl; 
+    this->lbLogger << "Inactive WebServers: " << inactive << endl; 
+    this->lbLogger << "Discarded/Rejected Requests: " << discarded << endl; 
 }

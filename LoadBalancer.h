@@ -33,6 +33,10 @@ class LoadBalancer {
 
         int getTotalRequestsProcessed();
 
+        int getRequestQueueSize();
+
+        void endingServerStatuses();
+
 };
 
 #endif 

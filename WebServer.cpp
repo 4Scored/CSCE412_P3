@@ -12,7 +12,7 @@ bool WebServer::processRequest() {
         this->processTimeLeft--; // Decrement current request's process time
         if (this->processTimeLeft <= 0) {
             this->isFree = true; // Freed after process time is up
-            this->lbLogger << "Server #" << this->serverID << " has finished processing Request from " << this->processingRequestID << endl;
+            this->lbLogger << "WebServer " << this->serverID << " has finished processing Request from " << this->processingRequestID << endl;
             return true;
         }
     }

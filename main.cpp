@@ -12,15 +12,16 @@ int main() {
     // For logging purposes    
     std::ofstream lbLogger("loadBalancerLog.txt");
     if (!lbLogger.is_open()) {
-        std::cerr << "Failed to open log file" << endl;
+        cerr << "Failed to open log file" << endl;
         return 1;
     }
+    lbLogger << "----------------" << endl;
 
     // For Random Request adding when running through cycles
     static std::random_device rd;
     static std::mt19937 rng(rd()); 
     static std::uniform_int_distribution<int> distAddReq(1, 3); // Cycle Time
-    static std::uniform_int_distribution<int> distAddRandReqs(200, 300); // Random Bursting Cycle Time
+    static std::uniform_int_distribution<int> distAddRandReqs(1, 400); // Random Bursting Cycle Time
 
     // Get Input (# of web servers and time to run)
     int numWebServers = 0, numTotalCycles = 0;
@@ -28,16 +29,19 @@ int main() {
     cin >> numWebServers;
     lbLogger << "Number of Web Servers: " << numWebServers << endl;
     cout << "Number of Cycles to run for: ";
-    cin >> numTotalCycles;
-    cout << endl;
+    cin >> numTotalCycles;    
     lbLogger << "Number of Cycles to run for: " << numTotalCycles << endl;    
-
-    LoadBalancer loadBalancer(numWebServers, lbLogger);
     
+    lbLogger << "Starting Queue Size: " << numWebServers * 100 << endl;
+    lbLogger << "Task Time Range: 4 - 10 cycles" << endl;
+    lbLogger << "----------------" << endl;
+
+    LoadBalancer loadBalancer(numWebServers, lbLogger);    
+
     // Generating full request queue (numWebServers * 100)
     for (int req = 0; req < numWebServers * 100; req++) { 
         loadBalancer.createRequest();
-    }
+    }     
 
     // Run through cycles
     for (int cycle = 1; cycle <= numTotalCycles; cycle++) {
@@ -45,7 +49,7 @@ int main() {
         if (distAddReq(rng) == 1) { // 33% of new request every time
             loadBalancer.createRequest();      
         }
-        if (cycle % 300 == 0 ) { // For every 300 cycles, there is a burst of 50 requests
+        if (distAddRandReqs(rng) % 201 == 0 ) { // There's a 1/40 chance for 50 burst requests
             for (int req = 0; req < 50; req++) {
                 loadBalancer.createRequest(); 
             }
@@ -58,8 +62,10 @@ int main() {
     }
 
     lbLogger << "----------------" << endl;
-    lbLogger << "Simulation Complete (with " << numTotalCycles << " clock cycles executed)" << endl;       
-    lbLogger << "Total requests successfully completed: " << loadBalancer.getTotalRequestsProcessed();
+    lbLogger << "Simulation Complete (with " << numTotalCycles << " clock cycles executed)" << endl;  
+    lbLogger << "Ending Queue Size (Remaining Requests in Queue): " << loadBalancer.getRequestQueueSize() << endl;     
+    lbLogger << "Total requests successfully completed: " << loadBalancer.getTotalRequestsProcessed() << endl;
+    loadBalancer.endingServerStatuses();
 
     return 0;
 }
