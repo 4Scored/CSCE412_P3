@@ -7,6 +7,27 @@
 
 using namespace std;
 
+/**
+ * @file main.cpp
+ * @brief Entry point for the Load Balancer simulation project.
+ *
+ * This program simulates web request handling by a configurable number of web servers
+ * using a LoadBalancer class. It supports dynamic scaling, random request generation,
+ * and logs activity to an output file. The simulation proceeds over a user-defined
+ * number of clock cycles.
+ */
+
+ /**
+ * @brief Main driver function for the load balancer simulation.
+ *
+ * Prompts the user for input (number of web servers and number of clock cycles),
+ * initializes the load balancer with a full queue of requests, and simulates
+ * each clock cycle by potentially adding new requests, assigning requests to
+ * servers, processing them, and scaling the server pool. Logs are written to
+ * "loadBalancerLog.txt".
+ *
+ * @return int Returns 0 upon successful completion; 1 if log file fails to open.
+ */
 int main() {
     
     // For logging purposes    
